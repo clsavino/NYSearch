@@ -1,24 +1,32 @@
 
 
-// variables
-
-var urlEndpoint = "https://api.nytimes.com/svc/search/v2/articlesearch.json?"
-// var queryURL = urlEndpoint + apiKey + q;
-
-urlEndpoint += $.param({
-	'api-key':'1b8ad75b08d7499ab6862418e9cc2c3a',
-	'q': $('#search'),
-	'begin_date': $('#startYear'),
-	'end_date': $('#endYear'),
-});
+var searchLimit = $('#numRecords').val();
+console.log(searchLimit);
 
 // helper write function
 var write = function (element, input) {
-	$(element).html(input);
+	$(element).append(input);
 };
 
 // submit button handler
 $('#searchBtn').on('click', function () {
+
+	// variables
+
+	var urlEndpoint = "https://api.nytimes.com/svc/search/v2/articlesearch.json?"
+	// var queryURL = urlEndpoint + apiKey + q;
+	var q = $('#search').val();
+	var begin_date = $('#startYear').val();
+	var end_date = $('#endYear').val();
+
+	urlEndpoint += $.param({
+		'api-key':'1b8ad75b08d7499ab6862418e9cc2c3a',
+		'q': q,
+		'begin_date': begin_date,
+		'end_date': end_date,
+	});
+	console.log(urlEndpoint);
+
 	// ajax call
 	$.ajax({
 		url: urlEndpoint,
@@ -27,12 +35,15 @@ $('#searchBtn').on('click', function () {
 	// when info retrieved 
 	.done(function (response) {
 		// variables
-		for (var i = 0; i < 8; i++) {
+		for (var i = 0; i < searchLimit; i++) {
 			
 			var headline = response.response.docs.headline.main;
-			var abstract = response.reaponse.docs.keywords.snippet;
+			console.log(headline);
+			var snippet = response.reaponse.docs.keywords.snippet;
+			console.log(snippet);
+
 			write('#wellSection', '<div>' + headline + '</div>');
-			write('#wellSection', '<div>' + abstract + '</div>');
+			write('#wellSection', '<div>' + snippet + '</div>');
 		}
 
 		// doc writes
