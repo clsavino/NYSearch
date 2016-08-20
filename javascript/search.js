@@ -10,10 +10,11 @@ var urlEndpoint = "https://api.nytimes.com/svc/search/v2/articlesearch.json?";
 
 
 
-$('#clearBtn').click(function(){
+$('#searchBtn').click(function(){
 	var q = $('#search').val(),
 		begin_date = $('#startYear').val() + '0101',
-		end_date = $('#endYear').val() + '1231';
+		end_date = $('#endYear').val() + '1231',
+		numRecords = $('#numRecords').val();
 
 		urlEndpoint += $.param({
 			'api-key':'1b8ad75b08d7499ab6862418e9cc2c3a',
@@ -22,8 +23,11 @@ $('#clearBtn').click(function(){
 			'end_date': end_date
 		});
 		console.log(urlEndpoint);
-		$.get(urlEndpoint,function(data){
-			console.log(data.response.docs[0].headline.main);
+		$.get(urlEndpoint, function(data){
+			for (var i=0; i<numRecords; i++){
+				console.log(data);
+				$('#wellSection').append('<section>"'+ data.response.docs[i].headline.main + '</section>');
+			}
 		});
-	
+		return false;
 });
